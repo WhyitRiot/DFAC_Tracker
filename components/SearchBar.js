@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, View, Keyboard, Button, Pressable } from "
 import { Feather, Entypo } from "@expo/vector-icons"
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const SearchBar = () => {
+const SearchBar = ({onTermChange}) => {
 
     const [showCancel, setCancel] = useState(false)
     const [showClear, setClear] = useState(false)
@@ -11,6 +11,7 @@ const SearchBar = () => {
         this.TextInput.clear()
         if (showClear){
             setClear(!showClear)
+            onTermChange('')
         }
         Keyboard.dismiss()
     }
@@ -21,10 +22,11 @@ const SearchBar = () => {
                 style={styles.input}
                 placeholder="Search"
                 onTouchStart={() => setCancel(!showCancel)}
-                onChangeText={() => {
+                onChangeText={newText => {
                     if(!showClear){
                         setClear(!showClear)
                     }
+                    onTermChange(newText)
                 }}
                 onBlur={() => {
                     setCancel(!showCancel)
@@ -41,6 +43,7 @@ const SearchBar = () => {
                 onTouchStart={() => {
                     this.TextInput.clear()
                     setClear(!showClear)
+                    onTermChange('')
                 }}>
                 <Entypo name="circle-with-cross" size={14} color="black" />
             </Pressable>}

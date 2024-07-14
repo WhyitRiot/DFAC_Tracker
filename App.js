@@ -10,6 +10,7 @@ export default function App() {
   const [recipes, setRecipes] = useState([])
   const [macros, setMacros] = useState([])
   const [database, setDb] = useState(null)
+  const [searchTerm, setTerm] = useState('')
 
   const onDataLoaded = (data, db) => {
     setRecipes(data)
@@ -17,11 +18,14 @@ export default function App() {
   const onMacrosLoaded = (data) => {
     setMacros(data)
   }
+  const onTermChange = (term) => {
+    setTerm(term)
+  }
   return (
     <SafeAreaView style={styles.container}>
-      <Data onDataLoaded={onDataLoaded} onMacrosLoaded={onMacrosLoaded}/>
+      <Data onDataLoaded={onDataLoaded} onMacrosLoaded={onMacrosLoaded} term={searchTerm}/>
       <View style={styles.searchBar}>
-        <SearchBar />
+        <SearchBar onTermChange={onTermChange}/>
       </View>
       <View style={styles.flatList}>
         <List data={recipes}/>
