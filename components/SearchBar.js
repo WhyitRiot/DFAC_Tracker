@@ -1,17 +1,19 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { StyleSheet, Text, TextInput, View, Keyboard, Button, Pressable } from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons"
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const SearchBar = ({onTermChange}) => {
+import { DataContext } from "../context/DataContext";
 
+const SearchBar = () => {
+    const { findRecipes } = useContext(DataContext)
     const [showCancel, setCancel] = useState(false)
     const [showClear, setClear] = useState(false)
     const clearInput = () => {
         this.TextInput.clear()
         if (showClear){
             setClear(!showClear)
-            onTermChange('')
+            findRecipes('')
         }
         Keyboard.dismiss()
     }
@@ -26,7 +28,7 @@ const SearchBar = ({onTermChange}) => {
                     if(!showClear){
                         setClear(!showClear)
                     }
-                    onTermChange(newText)
+                    findRecipes(newText)
                 }}
                 onBlur={() => {
                     setCancel(!showCancel)
@@ -43,7 +45,7 @@ const SearchBar = ({onTermChange}) => {
                 onTouchStart={() => {
                     this.TextInput.clear()
                     setClear(!showClear)
-                    onTermChange('')
+                    findRecipes('')
                 }}>
                 <Entypo name="circle-with-cross" size={14} color="black" />
             </Pressable>}

@@ -1,95 +1,78 @@
-import React, {useState, useEffect} from 'react'
-import {Text, View} from 'react-native'
 import * as SQLite from 'expo-sqlite/legacy'
-import * as FileSystem from 'expo-file-system'
-import {Asset} from "expo-asset"
 
-const Data = ({onDataLoaded, onMacrosLoaded, term}) => {
-    const [database, setDb] = useState(null)
-    const [recipes, setRecipes] = useState([])
-    const [isLoaded, setLoaded] = useState(false)
-    const [currentTerm, setNewTerm] = useState(term)
-    useEffect(()=>{
-        async function loadDB(){
-            if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/')).exists) {
-                await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite/');
-              }
-              console.log((await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/recipes.db')).exists)
-            if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/recipes.db')).exists){
-                const asset = await Asset.fromModule(require("../assets/recipes.db")).downloadAsync();
-                await FileSystem.copyAsync({
-                  from: asset.localUri, 
-                  to: FileSystem.documentDirectory + 'SQLite/recipes.db'});
-                console.log("Made it")
-                console.log(FileSystem.documentDirectory)
-                db = SQLite.openDatabase('recipes.db');
-                setDb(db)
-                console.log(db)
-            }
-            else{
-                console.log(FileSystem.documentDirectory + 'SQLite/')
-                db = SQLite.openDatabase('recipes.db')
-                setDb(db)
-            }
+const db = SQLite.openDatabase('recipes.db')
 
-        }
-        if (!database){
-            console.log("No database")
-            loadDB()
-        }
-        if (!isLoaded && database){
-            console.log("It exists")
-            const readOnly = true;
-            database.transaction(tx => {
-                console.log(term)
-                if (term === ''){
-                    tx.executeSql('select recipes.title, macros.calories, recipes.link from recipes inner join macros on caloriedata.macroLink = macros.macroLink inner join caloriedata on recipes.link = caloriedata.link', [],
-                        (_, resultSet) => {
-                            const fetchedRecipes = resultSet.rows._array
-                            console.log(fetchedRecipes[0])
-                            setRecipes(fetchedRecipes)
-                            setLoaded(true)
-                            onDataLoaded(fetchedRecipes)
-                            console.log('What')
-                        },
-                        (_, error) => console.error("Error fetching data:", error)
-                    )
-                }
-                else{
-                    tx.executeSql('select recipes.title, macros.calories, recipes.link from recipes inner join macros on caloriedata.macroLink = macros.macroLink inner join caloriedata on recipes.link = caloriedata.link where recipes.title like ?', [`%${term}%`],
-                        (_, resultSet) => {
-                            const fetchedRecipes = resultSet.rows._array
-                            console.log(fetchedRecipes[0])
-                            setRecipes(fetchedRecipes)
-                            setLoaded(true)
-                            onDataLoaded(fetchedRecipes)
-                            console.log('Term')
-                        },
-                        (_, error) => console.error("Error fetching data:", error)
-                    )
-                }
-            })
-            console.log(isLoaded)
-            console.log(recipes.length)
-        }
-        if (currentTerm != term){
-            database.transaction(tx => {
-                tx.executeSql('select recipes.title, macros.calories, recipes.link from recipes inner join macros on caloriedata.macroLink = macros.macroLink inner join caloriedata on recipes.link = caloriedata.link where recipes.title like ?', [`%${term}%`],
-                    (_, resultSet) => {
-                        const fetchedRecipes = resultSet.rows._array
-                        console.log(fetchedRecipes[0])
-                        setRecipes(fetchedRecipes)
-                        setLoaded(true)
-                        onDataLoaded(fetchedRecipes)
-                        setNewTerm(term)
-                        console.log('Term')
-                    },
-                    (_, error) => console.error("Error fetching data:", error)
+const getRecipes = (setRecipeData) => {
+    if (db){
+        db.transaction(
+            tx => {
+                tx.executeSql(
+                    'select recipes.title, recipes.color, recipes.link, macros.calories from recipes inner join caloriedata on recipes.link = caloriedata.link inner join macros on caloriedata.macroLink = macros.macroLink',
+                    [],
+                    (_, {rows: {_array}}) =>{
+                        setRecipeData(_array)
+                    }
                 )
-            })
-        }
-    }, [database, isLoaded, onDataLoaded, term])
-
-    return null
+            },
+            (t, error) => {console.log("db error load recipes"); console.log(error)},
+            (_t, _success) => {console.log("loaded recipes")}
+        );
+    }
 }
-export default Data;
+
+const getRecipesWithTerm = (term, setRecipeData) => {
+    if (db) {
+        db.transaction(
+            tx => {
+                tx.executeSql(
+                    'select recipes.title, recipes.color, recipes.link, macros.calories from recipes inner join caloriedata on recipes.link = caloriedata.link inner join macros on caloriedata.macroLink = macros.macroLink where recipes.title like ?',
+                    [`%${term}%`],
+                    (_, {rows: {_array}}) =>{
+                        setRecipeData(_array)
+                    }
+                )
+            },
+            (t, error) => {console.log("db error load recipes"); console.log(error)},
+            (_t, _success) => {console.log("loaded recipes like", term)}
+        )
+    }
+}
+
+const getMacros = (link, setMacroData) => {
+    if (db){
+        db.transaction(
+            tx => {
+                tx.executeSql(    
+                    'select macros.calories, macros.carbs, macros.sugars, macros.protein, macros.fat, macros.satfat, macros.sodium, macros.calcium, macros.fiber, caloriedata.portion from macros inner join caloriedata on macros.macroLink = caloriedata.macroLink where link = ?',
+                    [link],
+                    (_, {rows: {_array}}) => {
+                        setMacroData(_array)
+                    }
+                )
+            }
+        )
+    }
+}
+
+const getMacroSingle = (link, setMacroData) => {
+    if (db){
+        db.transaction(
+            tx => {
+                tx.executeSql(    
+                    'select macros.calories, macros.carbs, macros.sugars, macros.protein, macros.fat, macros.satfat, macros.sodium, macros.calcium, macros.fiber, caloriedata.portion from macros inner join caloriedata on macros.macroLink = caloriedata.macroLink where link = ?',
+                    [link],
+                    (_, {rows: {_array}}) => {
+                        setMacroData(_array)
+                    }
+                )
+            }
+        )
+    }
+}
+
+export const Data = {
+    getRecipes,
+    getRecipesWithTerm,
+    getMacros,
+    getMacroSingle
+}
