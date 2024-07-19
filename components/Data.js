@@ -25,8 +25,8 @@ const getRecipesWithTerm = (term, setRecipeData) => {
         db.transaction(
             tx => {
                 tx.executeSql(
-                    'select recipes.title, recipes.color, recipes.link, macros.calories from recipes inner join caloriedata on recipes.link = caloriedata.link inner join macros on caloriedata.macroLink = macros.macroLink where recipes.title like ?',
-                    [`%${term}%`],
+                    'select recipes.title, recipes.color, recipes.link, macros.calories from recipes inner join caloriedata on recipes.link = caloriedata.link inner join macros on caloriedata.macroLink = macros.macroLink where recipes.title like ? order by case when title like ? then 0 else 1 end, recipes.title;',
+                    [`%${term}%`, `${term}%`],
                     (_, {rows: {_array}}) =>{
                         setRecipeData(_array)
                     }

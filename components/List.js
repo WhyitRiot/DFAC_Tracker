@@ -31,10 +31,10 @@ const setColor = (item) =>{
     if (!(item.color)){
         color = "#555656"
     }
-    else if (item.color == 'yellow'){
+    else if (item.color === 'yellow'){
         color = "#F9DD4E"
     }
-    else if(item.color == 'green'){
+    else if(item.color === 'green'){
         color = "#60B158"
     }
     else{
@@ -83,19 +83,20 @@ const styles = StyleSheet.create({
     listItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: '#b4d4fa',
+        backgroundColor: '#ffffff',
         shadowColor: 'grey',
         shadowOpacity: 0.4,
         shadowOffset: 1,
         shadowRadius: 0.5,
         marginTop: 5,
         marginBottom: 5,
-        borderWidth: 1,
-        borderRadius: 15,
+        borderWidth: 0.5,
+        borderRadius: 10,
         padding: 5,
         paddingTop: 5,
         paddingBottom: 5,
-        height: 80
+        height: 80,
+        elevation: 1
     },
     listText1: {
         fontSize: 15,
