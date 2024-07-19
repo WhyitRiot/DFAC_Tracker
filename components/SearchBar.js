@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useContext} from "react";
 import { StyleSheet, Text, TextInput, View, Keyboard, Button, Pressable } from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons"
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import { DataContext } from "../context/DataContext";
 
@@ -13,8 +12,8 @@ const SearchBar = () => {
         this.TextInput.clear()
         if (showClear){
             setClear(!showClear)
-            findRecipes('')
         }
+        findRecipes('')
         Keyboard.dismiss()
     }
     return(
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "flex-start",
         flexDirection: "row",
-        borderWidth: 2,
+        borderWidth: 1.5,
         borderRadius: 20,
         backgroundColor: '#ffff'
     },
@@ -83,13 +82,13 @@ const styles = StyleSheet.create({
         color: "#6495ed"
     },
     clearButton:{
-        alignItems: 'center',
+        alignSelf: 'center',
         justifyContent: 'center',
         paddingRight: 10,
         paddingLeft: 10
     },
     cancelButton:{
-        alignItems: 'center',
+        alignSelf: 'center',
         justifyContent: 'center'
     }
 });

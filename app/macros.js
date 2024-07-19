@@ -14,11 +14,13 @@ const Macros = () =>{
     const [colorCode, setColorCode] = useState('#fff')
     const [colorCodeText, setColorCodeText] = useState(['EAT IN MODERATION', 'This food is not served often.'])
     const [colorCodeIcon, setColorCodeIcon] = useState(<AntDesign name="questioncircleo" size={24} color="black" />)
+    const [isLoading, setIsLoading] = useState(false)
     const route = useRoute();
     const navigation = useNavigation();
     const {macros, findMacroSingle} = useContext(DataContext)
     const { item } = route.params;
     useEffect(()=>{
+        setIsLoading(true)
         findMacroSingle(item.link)
         navigation.setOptions({title: item.title})
     },[item.link])
@@ -29,6 +31,9 @@ const Macros = () =>{
         setColorCodeIcon(setIcon(item))
     }, [item.color]);
     
+    useEffect(()=>{
+        setIsLoading(false)
+    },[colorCodeIcon])
 
     const setColor = (item) =>{
         var color = ''
@@ -86,7 +91,7 @@ const Macros = () =>{
 
     return(
         <SafeAreaView>
-            { macros[0] && 
+            { (macros[0] && !isLoading) ?
             <ScrollView>
                 <View style={{paddingLeft: 5, paddingRight: 5}}>
                     <View style={{backgroundColor: colorCode, borderWidth: 1, borderRadius: 10, padding: 5, paddingTop: 5, paddingBottom: 5, justifyContent: 'space-between'}}>
@@ -107,8 +112,8 @@ const Macros = () =>{
                     <Section header={<Text style={{ fontSize: 18, fontWeight: 'normal' }}>Serving Size: <Text style={{ fontWeight: 'bold' }}>{macros[0].portion}</Text></Text>} headerTextColor="#000" headerTextStyle={{fontSize: 18, fontWeight: 'bold'}}>
                         <Cell cellStyle='RightDetail' title="Calories:" detail={macros[0].calories} rightDetailColor="#000"/>
                         <Cell cellStyle='RightDetail' title="Protein:" detail={macros[0].protein} rightDetailColor="#000"/>
-                        <Cell cellStyle='RightDetail' title="Carbohydrates:" detail={macros[0].carbs} rightDetailColor="#000"/>
                         <Cell cellStyle='RightDetail' title="Fat:" detail={macros[0].fat} rightDetailColor="#000"/>
+                        <Cell cellStyle='RightDetail' title="Carbohydrates:" detail={macros[0].carbs} rightDetailColor="#000"/>
                     </Section>
                     <Section header="Additional Nutrition" headerTextStyle={{fontSize: 18}} headerTextColor="#000">
                         <Cell cellStyle='RightDetail' title="Sugars:" detail={macros[0].sugars} rightDetailColor="#000" />
@@ -119,7 +124,7 @@ const Macros = () =>{
                     </Section>
                 </TableView> 
             </ScrollView>
-            }
+            : <ActivityIndicator />}
         </SafeAreaView>
     )
 }
