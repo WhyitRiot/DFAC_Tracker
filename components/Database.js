@@ -5,10 +5,14 @@ import * as Updates from 'expo-updates'
 const loadDatabase = async () =>{
     // Open database async
     // Create SQLite directory if it doesn't exist
-    console.log('started load')
-    if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/')).exists) {
-        await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite/');
-        }
+    try{
+        console.log('started load')
+        if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/')).exists) {
+            await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite/');
+            }
+    }
+    catch(e){
+    }
     console.log('directory exists')
     //fileInfo = await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/recipes.db')
     //console.log(fileInfo['size'])

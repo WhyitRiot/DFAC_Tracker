@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-
+import * as SplashScreen from 'expo-splash-screen'
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SearchBar from '../components/SearchBar.js'
@@ -9,8 +9,10 @@ import useDatabase from '../hooks/useDatabase.js';
 
 export default function App() {
   const isDBLoadingComplete = useDatabase();
+  SplashScreen.preventAutoHideAsync();
   
   if (isDBLoadingComplete){
+    SplashScreen.hideAsync();
     console.log('done')
   }
 
