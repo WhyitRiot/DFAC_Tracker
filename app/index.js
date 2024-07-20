@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React from 'react'
 import * as SplashScreen from 'expo-splash-screen'
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,7 +7,7 @@ import List from '../components/List.js'
 
 import useDatabase from '../hooks/useDatabase.js';
 
-export default function App() {
+const index = () => {
   const isDBLoadingComplete = useDatabase();
   SplashScreen.preventAutoHideAsync();
   
@@ -27,6 +27,7 @@ export default function App() {
     </SafeAreaView>
   )
 }
+export default index;
 
 const styles = StyleSheet.create({
   container: {

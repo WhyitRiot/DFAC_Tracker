@@ -10,7 +10,7 @@ import { Feather } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 
-const Macros = () =>{
+const macros = () =>{
     const [colorCode, setColorCode] = useState('#fff')
     const [colorCodeText, setColorCodeText] = useState(['EAT IN MODERATION', 'This food is not served often.'])
     const [colorCodeIcon, setColorCodeIcon] = useState(<AntDesign name="questioncircleo" size={24} color="black" />)
@@ -128,4 +128,4 @@ const Macros = () =>{
         </SafeAreaView>
     )
 }
-export default Macros;
+export default macros;
