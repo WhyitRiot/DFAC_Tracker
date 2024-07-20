@@ -106,7 +106,7 @@ const macros = () =>{
                         </Text>
                     </View>
                 </View>
-                <TableView style={{paddingTop: 10}}>
+                <TableView appearance="light" style={{paddingTop: 10}}>
                     <Section header="Nutritional Data" headerTextColor="#000" headerTextStyle={{fontSize: 24, fontWeight: 'bold'}}>
                     </Section>
                     <Section header={<Text style={{ fontSize: 18, fontWeight: 'normal' }}>Serving Size: <Text style={{ fontWeight: 'bold' }}>{macros[0].portion}</Text></Text>} headerTextColor="#000" headerTextStyle={{fontSize: 18, fontWeight: 'bold'}}>
