@@ -14,13 +14,13 @@ const macros = () =>{
     const [colorCode, setColorCode] = useState('#fff')
     const [colorCodeText, setColorCodeText] = useState(['EAT IN MODERATION', 'This food is not served often.'])
     const [colorCodeIcon, setColorCodeIcon] = useState(<AntDesign name="questioncircleo" size={24} color="black" />)
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const route = useRoute();
     const navigation = useNavigation();
     const {macros, findMacroSingle} = useContext(DataContext)
     const { item } = route.params;
+
     useEffect(()=>{
-        setIsLoading(true)
         findMacroSingle(item.link)
         navigation.setOptions({title: item.title})
     },[item.link])
@@ -29,11 +29,17 @@ const macros = () =>{
         setColorCode(setColor(item));
         setColorCodeText(setText(item))
         setColorCodeIcon(setIcon(item))
-    }, [item.color]);
-    
-    useEffect(()=>{
         setIsLoading(false)
-    },[colorCodeIcon])
+    }, [item.color]);
+
+    useEffect(()=>{
+        navigation.addListener('beforeRemove', (e)=>{
+            if (e.data.action.type === 'POP'){
+                setIsLoading(true)
+                findMacroSingle('')
+            }
+        })
+    },[])
 
     const setColor = (item) =>{
         var color = ''
@@ -124,7 +130,7 @@ const macros = () =>{
                     </Section>
                 </TableView> 
             </ScrollView>
-            : <ActivityIndicator />}
+            : <ActivityIndicator style={{alignSelf:'center'}}/>}
         </SafeAreaView>
     )
 }

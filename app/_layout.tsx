@@ -21,7 +21,8 @@ export default function Layout() {
                     name="macros"
                     options={{
                         presentation: 'modal',
-                    }} />
+                    }}
+                    />
             </Stack>
         </DataContextProvider>
     )
