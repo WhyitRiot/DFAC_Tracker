@@ -60,9 +60,9 @@ const List = () => {
                 <View style={{backgroundColor: color, paddingLeft: 10, paddingRight: 10,
                 borderRadius: 15}}>
                 </View>
-                <View style={{justifyContent: 'space-between', paddingLeft: 5}}>
+                <View style={{justifyContent: 'space-between', paddingLeft: 5, flexWrap: 'wrap', flexShrink: 0.5, alignContent: 'flex-end'}}>
                     <Text style={styles.listText1}>{item.title}</Text>
-                    <Text style={styles.listText2}>Calories: {item.calories}</Text>
+                    <Text style={styles.listText2}>Calories: {String(item.calories).padStart(3, ' ')}</Text>
                 </View>
             </TouchableOpacity>
             )
@@ -82,6 +82,7 @@ export default List;
 const styles = StyleSheet.create({
     listItem: {
         flexDirection: 'row',
+        alignContent: 'center',
         justifyContent: 'space-between',
         backgroundColor: '#ffffff',
         shadowColor: 'grey',
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         alignSelf: 'flex-start',
         fontWeight: 'bold',
-        paddingRight: 5
+        paddingRight: 5,
     },
     listText2:{
         fontSize: 15,

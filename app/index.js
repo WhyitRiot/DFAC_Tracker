@@ -4,7 +4,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SearchBar from '../components/SearchBar.js'
 import List from '../components/List.js'
-
 import useDatabase from '../hooks/useDatabase.js';
 
 const index = () => {

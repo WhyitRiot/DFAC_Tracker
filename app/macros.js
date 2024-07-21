@@ -93,7 +93,7 @@ const macros = () =>{
         <SafeAreaView>
             { (macros[0] && !isLoading) ?
             <ScrollView>
-                <View style={{paddingLeft: 5, paddingRight: 5}}>
+                <View style={{paddingLeft: 5, paddingRight: 5, elevation: 1}}>
                     <View style={{backgroundColor: colorCode, borderWidth: 1, borderRadius: 10, padding: 5, paddingTop: 5, paddingBottom: 5, justifyContent: 'space-between'}}>
                         <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
                             {colorCodeIcon}
