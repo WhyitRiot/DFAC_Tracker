@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "DFAC_Tracker",
+    "name": "DFAC Tracker",
     "slug": "DFAC_Tracker",
     "scheme": "DFAC-Tracker",
-    "version": "1.0.0",
+    "version": "0.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,7 +16,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "whyitriot.DFAC.Tracker",
       "infoPlist": {
-        "UIViewControllerBasedStatusBarAppearance": true,
+        "UIViewControllerBasedStatusBarAppearance": true
       }   
     },
     "android": {
