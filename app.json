@@ -14,7 +14,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "whyitriot.DFAC.Tracker"
+      "bundleIdentifier": "whyitriot.DFAC.Tracker",
+      "infoPlist": {
+        "UIViewControllerBasedStatusBarAppearance": true,
+      }   
     },
     "android": {
       "adaptiveIcon": {

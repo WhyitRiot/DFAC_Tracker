@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router'
-import { StatusBar } from 'expo-status-bar';
+import {Platform} from 'react-native'
 import { DataContextProvider } from '../context/DataContext'
 
 export const unstable_settings = {
@@ -12,19 +12,23 @@ export default function Layout() {
             <Stack initialRouteName='index'>
                 <Stack.Screen
                     name="index"
-                    options={{
+                    options={!(Platform.OS === "ios") ? {
                         headerShown: false,
                         statusBarStyle: 'dark',
                         statusBarTranslucent: true,
                         statusBarColor: '#F2F2F2'
+                    }: {
+                        headerShown: false,
                     }}
                     />
                 <Stack.Screen
                     name="macros"
-                    options={{
+                    options={!(Platform.OS === "ios") ? {
                         presentation: 'modal',
                         statusBarStyle: 'dark',
                         statusBarColor: '#fff'
+                    }: {
+                        presentation: 'modal'
                     }}
                     />
             </Stack>
