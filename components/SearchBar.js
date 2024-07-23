@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useContext} from "react";
-import { StyleSheet, Text, TextInput, View, Keyboard, Button, Pressable } from "react-native";
-import { Feather, Entypo } from "@expo/vector-icons"
+import React, {useState, useContext} from "react";
+import { StyleSheet, Text, TextInput, View, Keyboard, Pressable } from "react-native";
+import { Entypo } from "@expo/vector-icons"
 
 import { DataContext } from "../context/DataContext";
 
@@ -8,13 +8,27 @@ const SearchBar = () => {
     const { findRecipes } = useContext(DataContext)
     const [showCancel, setCancel] = useState(false)
     const [showClear, setClear] = useState(false)
+    const [currentInput, setInput] = useState('')
+    const [isInputting, setIsInputting] = useState(false)
     const clearInput = () => {
         this.TextInput.clear()
         if (showClear){
             setClear(!showClear)
         }
         findRecipes('')
+        setInput('')
         Keyboard.dismiss()
+        setIsInputting(false)
+    }
+    const handleTouchStart = () =>{
+        if (!isInputting){
+            if (currentInput){
+                setClear(!showClear)
+            }
+            console.log(currentInput)
+            setCancel(!showCancel)
+            setIsInputting(true)
+        }
     }
     return(
         <View style={styles.container}>
@@ -22,11 +36,12 @@ const SearchBar = () => {
                 ref={input => {this.TextInput = input}}
                 style={styles.input}
                 placeholder="Search"
-                onTouchStart={() => setCancel(!showCancel)}
+                onTouchStart={() => handleTouchStart()}
                 onChangeText={newText => {
                     if(!showClear){
                         setClear(!showClear)
                     }
+                    setInput(newText)
                     findRecipes(newText)
                 }}
                 onBlur={() => {
@@ -34,6 +49,7 @@ const SearchBar = () => {
                     if (showClear){
                     setClear(!showClear)
                     }
+                    setIsInputting(false)
                     }
                 }
             >
@@ -44,6 +60,7 @@ const SearchBar = () => {
                 onTouchStart={() => {
                     this.TextInput.clear()
                     setClear(!showClear)
+                    setInput('')
                     findRecipes('')
                 }}>
                 <Entypo name="circle-with-cross" size={14} color="black" />

@@ -1,5 +1,4 @@
 import React, {useEffect, useContext, useState} from 'react'
-import {SafeAreaView} from 'react-native-safe-area-context'
 import {Text, View, ScrollView, ActivityIndicator} from 'react-native'
 import {useRoute} from '@react-navigation/native'
 import { DataContext } from '../context/DataContext'
@@ -17,7 +16,7 @@ const macros = () =>{
     const [isLoading, setIsLoading] = useState(true)
     const route = useRoute();
     const navigation = useNavigation();
-    const {macros, findMacroSingle} = useContext(DataContext)
+    const {macros, findMacroSingle, resetMacros} = useContext(DataContext)
     const { item } = route.params;
 
     useEffect(()=>{
@@ -36,7 +35,7 @@ const macros = () =>{
         navigation.addListener('beforeRemove', (e)=>{
             if (e.data.action.type === 'POP'){
                 setIsLoading(true)
-                findMacroSingle('')
+                resetMacros()
             }
         })
     },[])
@@ -96,11 +95,10 @@ const macros = () =>{
     }
 
     return(
-        <SafeAreaView>
-            { (macros[0] && !isLoading) ?
+            <>{ (macros[0] && !isLoading) ?
             <ScrollView>
                 <View style={{paddingLeft: 5, paddingRight: 5, elevation: 1}}>
-                    <View style={{backgroundColor: colorCode, borderWidth: 1, borderRadius: 10, padding: 5, paddingTop: 5, paddingBottom: 5, justifyContent: 'space-between'}}>
+                    <View style={{backgroundColor: colorCode, marginTop: 15, borderWidth: 1, borderRadius: 10, padding: 5, paddingTop: 5, paddingBottom: 5, justifyContent: 'space-between'}}>
                         <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
                             {colorCodeIcon}
                             <Text style={{fontWeight: 'bold', fontSize: 20, paddingBottom: 5}}>
@@ -130,8 +128,7 @@ const macros = () =>{
                     </Section>
                 </TableView> 
             </ScrollView>
-            : <ActivityIndicator style={{alignSelf:'center'}}/>}
-        </SafeAreaView>
+            : <ActivityIndicator style={{alignSelf:'center'}}/>}</>
     )
 }
 export default macros;

@@ -34,6 +34,9 @@ export const DataContextProvider = props => {
     const findMacroSingle = link => {
         return Data.getMacroSingle(link, setMacros)
     }
+    const resetMacros = () => {
+        setMacros([])
+    }
 
-    return <DataContext.Provider value={{ macros, recipes, findRecipes, findMacros, findMacroSingle}}>{children}</DataContext.Provider>
+    return <DataContext.Provider value={{ macros, recipes, findRecipes, findMacros, findMacroSingle, resetMacros}}>{children}</DataContext.Provider>
 }

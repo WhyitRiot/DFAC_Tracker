@@ -1,7 +1,8 @@
 import React from 'react'
 import * as SplashScreen from 'expo-splash-screen'
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import SearchBar from '../components/SearchBar.js'
 import List from '../components/List.js'
 import useDatabase from '../hooks/useDatabase.js';
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   searchBar:{
-    marginTop:15
+    marginTop:5
   },
   flatList:{
     borderTopWidth: 0.5,
