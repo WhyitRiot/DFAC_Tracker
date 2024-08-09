@@ -6,14 +6,12 @@ const loadDatabase = async () =>{
     // Open database async
     // Create SQLite directory if it doesn't exist
     try{
-        console.log('started load')
         if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/')).exists) {
             await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite/');
             }
     }
     catch(e){
     }
-    console.log('directory exists')
     //fileInfo = await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/recipes.db')
     //console.log(fileInfo['size'])
     // Copy database from assets folder if it doesn't already exist
@@ -21,7 +19,6 @@ const loadDatabase = async () =>{
         if (await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/recipes.db')['size'] <= 0){
             await FileSystem.deleteAsync(FileSystem.documentDirectory + 'SQLite/recipes.db')
         }
-        console.log('creating file')
         const asset = await Asset.fromModule(require("../assets/recipes.db")).downloadAsync();
         await FileSystem.copyAsync({
             from: asset.localUri, 

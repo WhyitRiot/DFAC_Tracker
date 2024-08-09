@@ -6,7 +6,6 @@ export default function useDatabase(){
     useEffect(()=>{
         async function loadDataAsync(){
             try{
-                console.log("Starting load")
                 await Database.loadDatabase()
                 setDBLoadingComplete(true);
             }catch(e){

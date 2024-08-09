@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect, useContext, Component} from 'react'
 import {View, FlatList, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import { DataContext } from '../context/DataContext'
 import { useNavigation, useRouter, useLocalSearchParams } from 'expo-router'
@@ -20,20 +20,20 @@ const setColor = (item) =>{
     return color
 }
 
-const List = () => {
+
+const LogList = ({logData, refreshLog}) => {
     const navigation = useNavigation();
-    const {recipes} = useContext(DataContext)
-    useEffect(()=>{
-    },[])
         const Item = ({item, style}) => {  
+            formatter = new Intl.NumberFormat("en-US", {maximumFractionDigits: 2})
             if (!item.calories){
                 item.calories = 'varies'
             }
             const color = setColor(item)
             const renderMacros = () => {
-                navigation.navigate("macros", {item: item})
+                navigation.navigate("logmacros", {item: item, servingCount: item.servings, refreshLog: refreshLog})
             }
             return(
+            <>
             <TouchableOpacity style={[styles.listItem, style]}
             onPress = {() => renderMacros()}
             activeOpacity={0.7}>
@@ -44,24 +44,32 @@ const List = () => {
                     <Text style={styles.titleText}>{item.title}</Text>
                     <View style={styles.itemTextContainer}>
                         <View style={styles.caloriesContainer}>
+                            <Text style={styles.servingsTitle}>Servings: </Text>
+                            <Text style={styles.servingsText}>{item['servings']}</Text>
+                        </View>
+                        <View style={styles.servingsContainer}>
                             <Text style={styles.caloriesTitle}>Calories: </Text>
-                            <Text style={styles.caloriesText}>{String(item.calories).padStart(3, ' ')}</Text>
+                            <Text style={styles.caloriesText}>{String(formatter.format(item['calories'] * item['servings'])).padStart(3, ' ')}</Text>
                         </View>
                     </View>
                 </View>
             </TouchableOpacity>
+            </>
             )
         }   
     return(
+        <>{logData[0] ?      
         <FlatList
-            data = {recipes}
-            renderItem ={({item}) => <Item item={item} style={{}}></Item>}
-            keyExtractor = {item => item.link}
+        data = {logData}
+        renderItem ={({item}) => <Item item={item} style={{}}></Item>}
+        keyExtractor = {item => item.id}
         >
         </FlatList>
+
+        : <Text style={{fontSize: 25, alignSelf: 'center'}}>Nothing logged!</Text>}</>
     )
 }
-export default List;
+export default LogList;
 
 const styles = StyleSheet.create({
     listItem: {
@@ -105,12 +113,26 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
     },
+    servingsContainer:{
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+    },
     caloriesTitle:{
-        fontSize: 15,
+        fontSize: 12,
         alignSelf: 'flex-start'
     },
+    servingsTitle:{
+        fontSize: 12,
+        fontWeight: 'bold',
+        paddingRight: 10
+    },
     caloriesText:{
-        fontSize: 15,
+        fontSize: 12,
+        alignSelf: 'flex-end'
+    },
+    servingsText:{
+        fontSize: 12,
+        fontWeight: 'bold',
         alignSelf: 'flex-end'
     }
 })

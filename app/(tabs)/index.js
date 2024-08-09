@@ -3,9 +3,9 @@ import * as SplashScreen from 'expo-splash-screen'
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import SearchBar from '../components/SearchBar.js'
-import List from '../components/List.js'
-import useDatabase from '../hooks/useDatabase.js';
+import SearchBar from '../../components/SearchBar.js'
+import List from '../../components/List.js'
+import useDatabase from '../../hooks/useDatabase.js';
 
 const index = () => {
   const isDBLoadingComplete = useDatabase();
@@ -13,11 +13,11 @@ const index = () => {
   
   if (isDBLoadingComplete){
     SplashScreen.hideAsync();
-    console.log('done')
   }
 
   return (
     <SafeAreaView style={styles.container}>
+    <StatusBar style='dark' />
           <View style={styles.searchBar}>
             <SearchBar />
           </View>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   searchBar:{
-    marginTop:5
+    paddingTop:5
   },
   flatList:{
     borderTopWidth: 0.5,

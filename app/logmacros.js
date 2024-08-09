@@ -1,23 +1,21 @@
 import React, {useEffect, useContext, useState} from 'react'
-import {Text, TextInput, View, ScrollView, ActivityIndicator, TouchableOpacity, Alert, Dimensions} from 'react-native'
+import {Text, View, ScrollView, ActivityIndicator, TouchableOpacity, Alert, Dimensions, DeviceEventEmitter} from 'react-native'
 import {useRoute} from '@react-navigation/native'
 import { DataContext } from '../context/DataContext'
-import ServingCounter from '../components/ServingCounter'
 import { useNavigation } from 'expo-router'
 import { Cell, Section, TableView } from 'react-native-tableview-simple';
-import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Feather, Octicons, AntDesign } from '@expo/vector-icons';
 
-const macros = () =>{
+const logmacros = () =>{
     const [colorCode, setColorCode] = useState('#fff')
     const [colorCodeText, setColorCodeText] = useState(['EAT IN MODERATION', 'This food is not served often.'])
     const [colorCodeIcon, setColorCodeIcon] = useState(<AntDesign name="questioncircleo" size={24} color="black" />)
     const [isLoading, setIsLoading] = useState(true)
-    const [servingCount, setServingCount] = useState(1)
     const route = useRoute();
     const navigation = useNavigation();
-    const {macros, recipe, findMacroSingle, resetMacros, logRecipe, refreshLog} = useContext(DataContext)
-    const { item } = route.params;
+    const {macros, recipe, findMacroSingle, resetMacros, delLoggedRecipe} = useContext(DataContext)
+    const { item, servingCount, refreshLog } = route.params;
 
     useEffect(()=>{
         findMacroSingle(item.link)
@@ -30,15 +28,6 @@ const macros = () =>{
         setColorCodeIcon(setIcon(item))
         setIsLoading(false)
     }, [item.color]);
-
-    useEffect(()=>{
-        navigation.addListener('beforeRemove', (e)=>{
-            if (e.data.action.type === 'POP'){
-                setIsLoading(true)
-                resetMacros()
-            }
-        })
-    },[navigation])
 
     const setColor = (item) =>{
         var color = ''
@@ -115,22 +104,22 @@ const macros = () =>{
         }
     }
 
-    function handleLog(recipe, macros) {
+    function handleLog(id) {
         const now = new Date();
         const today = (new Date(now.getFullYear(), now.getMonth(), now.getDate())).getTime()
         const tomorrow = (new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)).getTime()
-        logRecipe(new Date().getTime(), recipe[0], servingCount, macros[0])
-        refreshLog(today, tomorrow)
-        Alert.alert('Recipe Logged', 'Logged ' +`${servingCount}` + ' servings')
+        delLoggedRecipe(id)
+        DeviceEventEmitter.emit("event.refreshLog")
+        Alert.alert('Recipe Removed', 'Removed ' +`${item.title}` + ' servings')
         navigation.goBack()
     }
 
     const LogButton = ({style}) => {
         return(
             <View style={style}>
-                <TouchableOpacity onPress={() => handleLog(recipe, macros)}>
+                <TouchableOpacity onPress={() => handleLog(item.id)}>
                     <View style={{flexDirection:'row', alignSelf:'center', justifyContent:'space-evenly', padding: 2}}>
-                        <Text style={{color:'#6495ed', fontSize: 22}}>Log Recipe</Text>
+                        <Text style={{color:'red', fontSize: 22}}>Remove</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -143,7 +132,6 @@ const macros = () =>{
                 <Text style={{color:"#000", fontSize: 24, fontWeight: 'bold'}}>Nutritional Data</Text>
             </View>
             <View style={{flexDirection: 'column', alignContent: 'center', justifyContent: 'center'}}>
-                <ServingCounter setServing={setServingCount} currentServing={servingCount}/>
                 <LogButton style={{alignSelf: 'center', paddingTop: 5}}/>
             </View>
         </View>
@@ -192,4 +180,4 @@ const macros = () =>{
             : <ActivityIndicator style={{alignSelf:'center'}}/>}</>
     )
 }
-export default macros;
+export default logmacros;
